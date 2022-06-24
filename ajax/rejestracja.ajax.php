@@ -1,6 +1,14 @@
 <?php
-$login=$_POST['login'];
-$haslo=$_POST['haslo'];
+include '../database/db_connector.php';
 
-echo $login;
-echo $haslo;
+
+$login = $_POST['login'];
+$password = $_POST['password'];
+
+if (empty($login) || empty($password)) {
+    echo '<span style="color:#F00;text-align:center;">Please fill login and password correctly!</span>';
+} else {
+    $conn = new DBConnector();
+    $conn->Connect();
+    $conn->TryLoginUser($login, $password);
+}
