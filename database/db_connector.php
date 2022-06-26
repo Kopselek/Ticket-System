@@ -47,7 +47,7 @@ class DBConnector
         echo "Successful login!";
     }
 
-    private function IsUserInDatabase($login)
+    function IsUserInDatabase($login)
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}';";
         $result = $this->conn->query($sql);
@@ -55,6 +55,16 @@ class DBConnector
             return true;
         }
         return false;
+    }
+
+    function CreateUser($login, $password, $email)
+    {
+        $sql = "INSERT INTO `users` (`user`, `password`, `email`) VALUES ('{$login}', '$password', '$email');";
+        if ($this->conn->query($sql)) {
+            echo "Registration complete! " . "<a href='../'> Please Log in!</a>";
+        } else {
+            echo "Registration error";
+        }
     }
 
     private function IsPasswordMatching($login, $password)
