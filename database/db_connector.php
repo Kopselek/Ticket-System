@@ -33,21 +33,23 @@ class DBConnector
     function TryLoginUser($login, $password)
     {
         $user_exist = $this->IsUserInDatabase($login);
-        if ($user_exist) {
-            $password_matches = $this->IsPasswordMatching($login, $password);
-            if ($password_matches) {
-                echo "Successful login!";
-            } else {
-                echo "Login or Password does not match.";
-            }
-        } else {
+        if (!$user_exist) {
             echo "User does not exist! Please register first.";
+            return;
         }
+
+        $password_matches = $this->IsPasswordMatching($login, $password);
+        if (!$password_matches) {
+            echo "Login or Password does not match.";
+            return;
+        }
+
+        echo "Successful login!";
     }
 
     private function IsUserInDatabase($login)
     {
-        $sql = "SELECT * FROM `" . $this->database_table . "` WHERE BINARY `" . $this->sql_user . "` = '" . $login . "';";
+        $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}';";
         $result = $this->conn->query($sql);
         if ($result->num_rows > 0) {
             return true;
@@ -57,7 +59,7 @@ class DBConnector
 
     private function IsPasswordMatching($login, $password)
     {
-        $sql = "SELECT * FROM `" . $this->database_table . "` WHERE BINARY `" . $this->sql_user . "` = '" . $login . "' AND `" . $this->sql_password . "` = '" . $password . "';";
+        $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}' AND `{$this->sql_password}` = '{$password}';";
         $result = $this->conn->query($sql);
         if ($result->num_rows > 0) {
             return true;
