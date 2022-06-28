@@ -44,7 +44,7 @@ class DBConnector
             return;
         }
 
-        echo "Successful login!";
+        return true;
     }
 
     function IsUserInDatabase($login)
