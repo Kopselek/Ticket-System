@@ -14,4 +14,5 @@ if (empty($login) || empty($password)) {
         $_SESSION["login"] = $login;
         echo '<script type="text/javascript"> window.open("../public/session.php","_self");</script>';
     }
+    $conn->Disconnect();
 }

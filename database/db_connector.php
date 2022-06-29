@@ -67,6 +67,16 @@ class DBConnector
         }
     }
 
+    function CreateTicket($user, $title, $message)
+    {
+        $sql = "INSERT INTO `tickets` (`id`, `user`, `title`, `message`, `date`) VALUES (NULL, '{$user}', '{$title}', '{$message}', current_timestamp())";
+        if ($this->conn->query($sql)) {
+            echo "Sucessful!";
+        } else {
+            echo "Sending Ticket error";
+        }
+    }
+
     private function IsPasswordMatching($login, $password)
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}' AND `{$this->sql_password}` = '{$password}';";

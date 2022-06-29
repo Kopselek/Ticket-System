@@ -16,4 +16,5 @@ if (empty($login) || empty($password) || empty($email)) {
     } else {
         $conn->CreateUser($login, $password, $email);
     }
+    $conn->Disconnect();
 }
