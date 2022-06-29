@@ -12,9 +12,19 @@ class DBConnector
 
     private $database = "tsdb";
     private $database_table = "users";
+    private $database_ticket_table = "tickets";
 
     private $sql_user = "user";
     private $sql_password = "password";
+    private $sql_email = "email";
+
+    private $ticket_ticketid = "ticket_id";
+    private $ticket_ownuser = "own_user";
+    private $ticket_id = "id";
+    private $ticket_user = "user";
+    private $ticket_title = "title";
+    private $ticket_message = "message";
+    private $ticket_date = "date";
 
     private $conn;
 
@@ -59,7 +69,7 @@ class DBConnector
 
     function CreateUser($login, $password, $email)
     {
-        $sql = "INSERT INTO `users` (`user`, `password`, `email`) VALUES ('{$login}', '$password', '$email');";
+        $sql = "INSERT INTO `{$this->database_table}` (`{$this->sql_user}`, `{$this->sql_password}`, `{$this->sql_email}`) VALUES ('{$login}', '$password', '$email');";
         if ($this->conn->query($sql)) {
             echo "Registration complete! " . "<a href='../'> Please Log in!</a>";
         } else {
@@ -69,12 +79,37 @@ class DBConnector
 
     function CreateTicket($user, $title, $message)
     {
-        $sql = "INSERT INTO `tickets` (`id`, `user`, `title`, `message`, `date`) VALUES (NULL, '{$user}', '{$title}', '{$message}', current_timestamp())";
-        if ($this->conn->query($sql)) {
-            echo "Sucessful!";
-        } else {
-            echo "Sending Ticket error";
+        $get_ticket = "MAX(`{$this->ticket_ticketid}`)";
+        $sql = "SELECT {$get_ticket} FROM `{$this->database_ticket_table}`;";
+        $result = $this->conn->query($sql);
+        $ticket_new = 0;
+        if ($result->num_rows > 0) {
+            $ticket_new = 1 + $result->fetch_assoc()[$get_ticket];
+            $ticket_message = $this->CreateTicketMessage($ticket_new, $user, 0, $user, $title, $message);
+            if ($ticket_message) {
+                echo "Correctly created ticket!";
+            }
         }
+    }
+
+    function CreateTicketMessage($ticket_id, $own_user, $id, $user, $title, $message)
+    {
+        $sql = "INSERT INTO `{$this->database_ticket_table}` (`{$this->ticket_ticketid}`, `{$this->ticket_ownuser}`, `{$this->ticket_id}`, `{$this->ticket_user}`, `{$this->ticket_title}`, `{$this->ticket_message}`, `{$this->ticket_date}`) 
+        VALUES ('{$ticket_id}', '{$own_user}', '{$id}', '{$user}', '{$title}', '{$message}', current_timestamp());";
+        if ($this->conn->query($sql)) {
+            return true;
+        }
+        return false;
+    }
+
+    function GetUserTickets($user)
+    {
+        $sql = "SELECT `{$this->ticket_ticketid}` FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}';";
+        $result = $this->conn->query($sql);
+        if ($result->num_rows > 0) {
+            return $result->fetch_all();
+        }
+        return null;
     }
 
     private function IsPasswordMatching($login, $password)

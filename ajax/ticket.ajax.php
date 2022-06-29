@@ -15,5 +15,6 @@ if (empty($ticket) || empty($ticket_content)) {
     $conn = new DBConnector();
     $conn->Connect();
     $conn->CreateTicket($user, $ticket, $ticket_content);
+    $user_tickets = $conn->GetUserTickets($user);
     $conn->Disconnect();
 }

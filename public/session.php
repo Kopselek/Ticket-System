@@ -1,6 +1,5 @@
 <?php session_start();  ?>
 
-
 <html>
 
 <head>
@@ -18,6 +17,7 @@
     } else {
         echo "<h1>Welcome {$_SESSION["login"]}</h1> create new ticket here!";
     }
+
     ?>
     <br>
     <form id="form" method="POST" action="">
@@ -28,6 +28,8 @@
         <button id="ticket-submit">Submit</button>
     </form>
     <div id="msg"></div>
+    <br>
+    <div id="tickets"></div>
 </body>
 
 </html>

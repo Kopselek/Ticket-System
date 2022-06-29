@@ -24,6 +24,14 @@ $(document).ready(function () {
                 );
             },
         });
+        $.ajax({
+            type: 'POST',
+            method: 'POST',
+            url: '/ajax/ticket_list.ajax.php',
+            success: function (msg) { 
+                $('#tickets').html(msg);
+            }
+        });
         return false;
     });
 });
