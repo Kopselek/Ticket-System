@@ -26,6 +26,8 @@ class DBConnector
     private $ticket_message = "message";
     private $ticket_date = "date";
 
+    private $permission = "admin";
+
     private $conn;
 
     function Connect()
@@ -88,6 +90,7 @@ class DBConnector
             $ticket_message = $this->CreateTicketMessage($ticket_new, $user, 0, $user, $title, $message);
             if ($ticket_message) {
                 echo "Correctly created ticket!";
+                return $ticket_new;
             }
         }
     }
@@ -112,7 +115,36 @@ class DBConnector
         return null;
     }
 
-    private function IsPasswordMatching($login, $password)
+    function GetTicket($id)
+    {
+        $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ticketid}` = {$id};";
+        $result = $this->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function UserHavePermissionToTicket($user, $id)
+    {
+        if ($this->UserIsAdmin($user, $id)) {
+            return true;
+        }
+        $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}' AND `{$this->ticket_ticketid}` = {$id};";
+        $result = $this->conn->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        }
+        return false;
+    }
+    function UserIsAdmin($user, $id)
+    {
+        $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$user}' AND `{$this->permission}` = 1;";
+        $result = $this->conn->query($sql);
+        if ($result->num_rows > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function IsPasswordMatching($login, $password)
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}' AND `{$this->sql_password}` = '{$password}';";
         $result = $this->conn->query($sql);

@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
     $(document).on('click', '#registration_checkbox', function (e) {
         var url = $(location).attr('href');
-        $(location).attr('href', url + 'registration.html');
+        $(location).attr('href', url + 'public/registration.html');
         return false;
     });
 

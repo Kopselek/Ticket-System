@@ -13,9 +13,10 @@ $conn = new DBConnector();
 $conn->Connect();
 
 $list = $conn->GetUserTickets($user);
-
-foreach ($list as $ticket) {
-    $html = $html . "<p>Ticket {$ticket[0]}</p><br>";
+if (!is_null($list)) {
+    foreach ($list as $ticket) {
+        $html = $html . "<a href='?ticket={$ticket[0]}' >Ticket {$ticket[0]}</a><br>";
+    }
 }
 
 echo $html;

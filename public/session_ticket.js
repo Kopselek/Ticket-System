@@ -2,16 +2,18 @@ $(document).ready(function () {
     $(document).on('click', '#ticket-submit', function (e) {  
         e.preventDefault();
         var form = $('#form').serialize();
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const ticket = urlParams.get('ticket');
         $.ajax({
             type: 'POST',
             method: 'POST',
-            data: form,
-            url: '/ajax/ticket.ajax.php',
+            data: `ticket-id=${ticket}&` + form,
+            url: '/ajax/ticket_message.ajax.php',
             success: function(msg) {
-                $('#msg').html(msg);
                 if(msg == 'Sucessful!'){
-                    $('#ticket').val('');
                     $('#ticket-content').val('');
+                    location.reload(true);
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -24,22 +26,6 @@ $(document).ready(function () {
                 );
             },
         });
-        $.ajax({
-            type: 'POST',
-            method: 'POST',
-            url: '/ajax/ticket_list.ajax.php',
-            success: function (msg) { 
-                $('#tickets').html(msg);
-            }
-        });
         return false;
-    });
-    $.ajax({
-        type: 'POST',
-        method: 'POST',
-        url: '/ajax/ticket_list.ajax.php',
-        success: function (msg) { 
-            $('#tickets').html(msg);
-        }
     });
 });
