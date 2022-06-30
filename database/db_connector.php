@@ -107,7 +107,12 @@ class DBConnector
 
     function GetUserTickets($user)
     {
-        $sql = "SELECT `{$this->ticket_ticketid}` FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}';";
+        $sql = "";
+        if ($this->UserIsAdmin($user)) {
+            $sql = "SELECT * FROM {$this->database_ticket_table};";
+        } else {
+            $sql = "SELECT `{$this->ticket_ticketid}` FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}';";
+        }
         $result = $this->conn->query($sql);
         if ($result->num_rows > 0) {
             return $result->fetch_all();
@@ -124,7 +129,7 @@ class DBConnector
 
     function UserHavePermissionToTicket($user, $id)
     {
-        if ($this->UserIsAdmin($user, $id)) {
+        if ($this->UserIsAdmin($user)) {
             return true;
         }
         $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}' AND `{$this->ticket_ticketid}` = {$id};";
@@ -134,7 +139,7 @@ class DBConnector
         }
         return false;
     }
-    function UserIsAdmin($user, $id)
+    function UserIsAdmin($user)
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$user}' AND `{$this->permission}` = 1;";
         $result = $this->conn->query($sql);
