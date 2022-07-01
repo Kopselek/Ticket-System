@@ -63,7 +63,7 @@ class DBConnector
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}';";
         $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             return true;
         }
         return false;
@@ -85,7 +85,7 @@ class DBConnector
         $sql = "SELECT {$get_ticket} FROM `{$this->database_ticket_table}`;";
         $result = $this->conn->query($sql);
         $ticket_new = 0;
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             $ticket_new = 1 + $result->fetch_assoc()[$get_ticket];
             $ticket_message = $this->CreateTicketMessage($ticket_new, $user, 0, $user, $title, $message);
             if ($ticket_message) {
@@ -114,7 +114,7 @@ class DBConnector
             $sql = "SELECT `{$this->ticket_ticketid}` FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}';";
         }
         $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             return $result->fetch_all();
         }
         return null;
@@ -134,7 +134,7 @@ class DBConnector
         }
         $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}' AND `{$this->ticket_ticketid}` = {$id};";
         $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             return true;
         }
         return false;
@@ -143,7 +143,7 @@ class DBConnector
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$user}' AND `{$this->permission}` = 1;";
         $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             return true;
         }
         return false;
@@ -153,7 +153,7 @@ class DBConnector
     {
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}' AND `{$this->sql_password}` = '{$password}';";
         $result = $this->conn->query($sql);
-        if ($result->num_rows > 0) {
+        if ($result->fetch_assoc()) {
             return true;
         }
         return false;
