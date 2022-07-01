@@ -6,15 +6,19 @@ $login = $_POST['login'];
 $password = $_POST['password'];
 $email = $_POST['email'];
 
-if (empty($login) || empty($password) || empty($email)) {
-    echo '<span style="color:#F00;text-align:center;">Please fill login, password and email correctly!</span>';
+if (strlen($login) < 3 && strlen($password) < 3 && strlen($password)) {
+    echo '<span style="color:#F00;text-align:center;">Please login and password must have more than 3 letters!</span>';
 } else {
-    $conn = new DBConnector();
-    $conn->Connect();
-    if ($conn->IsUserInDatabase($login)) {
-        echo '<span style="color:#F00;text-align:center;">Username is taken!</span>';
+    if (empty($login) || empty($password) || empty($email)) {
+        echo '<span style="color:#F00;text-align:center;">Please fill login, password and email correctly!</span>';
     } else {
-        $conn->CreateUser($login, $password, $email);
+        $conn = new DBConnector();
+        $conn->Connect();
+        if ($conn->IsUserInDatabase($login)) {
+            echo '<span style="color:#F00;text-align:center;">Username is taken!</span>';
+        } else {
+            $conn->CreateUser($login, $password, $email);
+        }
+        $conn->Disconnect();
     }
-    $conn->Disconnect();
 }

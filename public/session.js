@@ -13,6 +13,14 @@ $(document).ready(function () {
                     $('#ticket').val('');
                     $('#ticket-content').val('');
                 }
+                $.ajax({
+                    type: 'POST',
+                    method: 'POST',
+                    url: '/ajax/ticket_list.ajax.php',
+                    success: function (msg) { 
+                        $('#tickets').html(msg);
+                    }
+                });
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 $('#msg').html(
@@ -23,14 +31,6 @@ $(document).ready(function () {
                         '</div>'
                 );
             },
-        });
-        $.ajax({
-            type: 'POST',
-            method: 'POST',
-            url: '/ajax/ticket_list.ajax.php',
-            success: function (msg) { 
-                $('#tickets').html(msg);
-            }
         });
         return false;
     });
