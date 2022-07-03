@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var blockSending = false;
     $(document).on('click', '#ticket-submit', function (e) {
-        if(blockSending) { return; }
+        if(blockSending) { return false; }
 
         blockSending = true;
         e.preventDefault();
