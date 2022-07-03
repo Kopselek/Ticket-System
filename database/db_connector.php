@@ -44,6 +44,9 @@ class DBConnector
 
     function TryLoginUser($login, $password)
     {
+        $login = $this->RealEscapeString($login);
+        $password = $this->RealEscapeString($password);
+
         $user_exist = $this->IsUserInDatabase($login);
         if (!$user_exist) {
             echo "User does not exist! Please register first.";
@@ -61,9 +64,11 @@ class DBConnector
 
     function IsUserInDatabase($login)
     {
+        $login = $this->RealEscapeString($login);
+
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}';";
         $result = $this->conn->query($sql);
-        if ($result->fetch_assoc()) {
+        if ($result->fetch_array()) {
             return true;
         }
         return false;
@@ -71,6 +76,10 @@ class DBConnector
 
     function CreateUser($login, $password, $email)
     {
+        $login = $this->RealEscapeString($login);
+        $password = $this->RealEscapeString($password);
+        $email = $this->RealEscapeString($email);
+
         $sql = "INSERT INTO `{$this->database_table}` (`{$this->sql_user}`, `{$this->sql_password}`, `{$this->sql_email}`) VALUES ('{$login}', '$password', '$email');";
         if ($this->conn->query($sql)) {
             echo "Registration complete! " . "<a href='../'> Please Log in!</a>";
@@ -81,22 +90,30 @@ class DBConnector
 
     function CreateTicket($user, $title, $message)
     {
+        $user = $this->RealEscapeString($user);
+        $title = $this->RealEscapeString($title);
+        $message = $this->RealEscapeString($message);
+
         $get_ticket = "MAX(`{$this->ticket_ticketid}`)";
         $sql = "SELECT {$get_ticket} FROM `{$this->database_ticket_table}`;";
         $result = $this->conn->query($sql);
-        $ticket_new = 0;
-        if ($result->fetch_assoc()) {
-            $ticket_new = 1 + $result->fetch_assoc()[$get_ticket];
-            $ticket_message = $this->CreateTicketMessage($ticket_new, $user, 0, $user, $title, $message);
-            if ($ticket_message) {
-                echo "Correctly created ticket!";
-                return $ticket_new;
-            }
+        $ticket_new = 1 + $result->fetch_assoc()[$get_ticket];
+        $ticket_message = $this->CreateTicketMessage($ticket_new, $user, 0, $user, $title, $message);
+        if ($ticket_message) {
+            echo "Correctly created ticket!";
+            return $ticket_new;
         }
     }
 
     function CreateTicketMessage($ticket_id, $own_user, $id, $user, $title, $message)
     {
+        $ticket_id = $this->RealEscapeString($ticket_id);
+        $own_user = $this->RealEscapeString($own_user);
+        $id = $this->RealEscapeString($id);
+        $user = $this->RealEscapeString($user);
+        $title = $this->RealEscapeString($title);
+        $message = $this->RealEscapeString($message);
+
         $sql = "INSERT INTO `{$this->database_ticket_table}` (`{$this->ticket_ticketid}`, `{$this->ticket_ownuser}`, `{$this->ticket_id}`, `{$this->ticket_user}`, `{$this->ticket_title}`, `{$this->ticket_message}`, `{$this->ticket_date}`) 
         VALUES ('{$ticket_id}', '{$own_user}', '{$id}', '{$user}', '{$title}', '{$message}', current_timestamp());";
         if ($this->conn->query($sql)) {
@@ -107,6 +124,8 @@ class DBConnector
 
     function GetUserTickets($user)
     {
+        $user = $this->RealEscapeString($user);
+
         $sql = "";
         if ($this->UserIsAdmin($user)) {
             $sql = "SELECT * FROM {$this->database_ticket_table};";
@@ -114,7 +133,7 @@ class DBConnector
             $sql = "SELECT `{$this->ticket_ticketid}` FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}';";
         }
         $result = $this->conn->query($sql);
-        if ($result->fetch_assoc()) {
+        if ($result->fetch_array()) {
             return $result->fetch_all();
         }
         return null;
@@ -122,6 +141,8 @@ class DBConnector
 
     function GetTicket($id)
     {
+        $id = $this->RealEscapeString($id);
+
         $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ticketid}` = {$id};";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
@@ -129,21 +150,26 @@ class DBConnector
 
     function UserHavePermissionToTicket($user, $id)
     {
+        $user = $this->RealEscapeString($user);
+        $id = $this->RealEscapeString($id);
+
         if ($this->UserIsAdmin($user)) {
             return true;
         }
         $sql = "SELECT * FROM `{$this->database_ticket_table}` WHERE `{$this->ticket_ownuser}` = '{$user}' AND `{$this->ticket_ticketid}` = {$id};";
         $result = $this->conn->query($sql);
-        if ($result->fetch_assoc()) {
+        if ($result->fetch_array()) {
             return true;
         }
         return false;
     }
     function UserIsAdmin($user)
     {
+        $user = $this->RealEscapeString($user);
+
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$user}' AND `{$this->permission}` = 1;";
         $result = $this->conn->query($sql);
-        if ($result->fetch_assoc()) {
+        if ($result->fetch_array()) {
             return true;
         }
         return false;
@@ -151,11 +177,19 @@ class DBConnector
 
     function IsPasswordMatching($login, $password)
     {
+        $login = $this->RealEscapeString($login);
+        $password = $this->RealEscapeString($password);
+
         $sql = "SELECT * FROM `{$this->database_table}` WHERE `{$this->sql_user}` = '{$login}' AND `{$this->sql_password}` = '{$password}';";
         $result = $this->conn->query($sql);
-        if ($result->fetch_assoc()) {
+        if ($result->fetch_array()) {
             return true;
         }
         return false;
+    }
+
+    private function RealEscapeString($variable)
+    {
+        return $this->conn->real_escape_string($variable);
     }
 }
