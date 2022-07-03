@@ -1,5 +1,9 @@
 $(document).ready(function () {
-    $(document).on('click', '#ticket-submit', function (e) {  
+    var blockSending = false;
+    $(document).on('click', '#ticket-submit', function (e) {
+        if(blockSending) { return; }
+
+        blockSending = true;
         e.preventDefault();
         var form = $('#form').serialize();
         $.ajax({
@@ -8,6 +12,7 @@ $(document).ready(function () {
             data: form,
             url: '/ajax/ticket.ajax.php',
             success: function(msg) {
+                blockSending = false;
                 $('#msg').html(msg);
                 if(msg == 'Sucessful!'){
                     $('#ticket').val('');
@@ -23,6 +28,7 @@ $(document).ready(function () {
                 });
             },
             error: function(xhr, ajaxOptions, thrownError) {
+                blockSending = false;
                 $('#msg').html(
                     '<div class="alert alert-danger">Error. Try again. Error message: ' +
                         xhr.status +
