@@ -1,10 +1,5 @@
 <?php
-require_once __DIR__ . "/Site/Util/HtmlElement.php";
-require_once __DIR__ . "/Site/Util/Form.php";
-require_once __DIR__ . "/Site/Util/Mist/Button.php";
-require_once __DIR__ . "/Site/Util/Input/BaseInput.php";
-require_once __DIR__ . "/Site/Util/Input/TextInput.php";
-require_once __DIR__ . "/Site/Util/Input/PasswordInput.php";
+include __DIR__ . "/Config/Autoloader.php";
 
 $form = new Form();
 $form->addElement(new TextInput('login', 'Login'));
@@ -25,8 +20,10 @@ $form->addElement(new Button('Submit'));
 <head>
 
     <meta charset="utf-8">
+    <meta name="description" content="Ticket-System show me how php is fine">
+    <meta name="author" content="Kopselek">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ticket-Panel</title>
+    <title>Ticket-System</title>
 </head>
 
 <body>
