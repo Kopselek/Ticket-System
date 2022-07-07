@@ -10,7 +10,8 @@ $(document).ready(function () {
             success: function (msg) {
                 $('#msg').html(msg);
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            function (xhr, ajaxOptions, thrownError) {
+                $('#ajax-loader').hide();
                 $('#msg').html(
                     '<div class="alert alert-danger">Error. Try again. Error message: ' +
                         xhr.status +
