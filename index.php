@@ -25,7 +25,7 @@ if (isset($_SESSION["login"])) {
 </head>
 
 <body>
-    <?php echo ($site instanceof BaseSite) ? $site->render_site() : failed_render_site(); ?>
+    <?php echo (isset($site) && $site instanceof BaseSite) ? $site->render_site() : failed_render_site(); ?>
 </body>
 
 </html>
