@@ -13,5 +13,9 @@ abstract class BaseSite
     }
 
     abstract public function create();
-    abstract public function render_site(): string;
+
+    public function render_site(): string
+    {
+        return implode(PHP_EOL, array_map(fn ($form) => $form->render(), $this->forms));
+    }
 }

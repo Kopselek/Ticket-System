@@ -1,13 +1,12 @@
-<?php
+<?php session_start();
 include __DIR__ . "/Config/Autoloader.php";
 
 $site;
 
-session_start();
 if (isset($_SESSION["login"])) {
-    $site = new LoginSite();
+    $site = new PanelSite($_SESSION["login"]);
 } else {
-    //unlogged
+    $site = new LoginSite();
 }
 ?>
 
