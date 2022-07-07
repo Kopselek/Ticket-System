@@ -1,7 +1,7 @@
 <?php
 include __DIR__ . "/Config/Autoloader.php";
 
-$site = new LoginSite();;
+$site;
 
 session_start();
 if (isset($_SESSION["login"])) {
