@@ -9,4 +9,5 @@ require_once __DIR__ . "/../Site/Util/Input/PasswordInput.php";
 require_once __DIR__ . "/../Site/Util/Output/MessageOutput.php";
 require_once __DIR__ . "/../Site/BaseSite.php";
 require_once __DIR__ . "/../Site/LoginSite.php";
+require_once __DIR__ . '/../Site/RegisterSite.php';
 require_once __DIR__ . "/../Site/PanelSite.php";

@@ -1,12 +1,12 @@
 <?php session_start();
 include __DIR__ . "/Config/Autoloader.php";
 
-$site;
+$site = new LoginSite();
+$js = 'index.js';
 
 if (isset($_SESSION["login"])) {
     $site = new PanelSite($_SESSION["login"]);
-} else {
-    $site = new LoginSite();
+    $js = 'panel.js';
 }
 ?>
 
@@ -20,7 +20,7 @@ if (isset($_SESSION["login"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Ticket-System</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script language="javascript" src="Public/login.js" type="text/javascript"></script>
+    <script language="javascript" src="Public/<?php echo $js ?>" type="text/javascript"></script>
 </head>
 
 <body>
