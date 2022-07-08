@@ -3,9 +3,11 @@ include __DIR__ . "/Config/Autoloader.php";
 
 $site = new LoginSite();
 $js = 'index.js';
+$conn;
 
 if (isset($_SESSION["login"])) {
-    $site = new PanelSite($_SESSION["login"]);
+    $conn = new DBConnector();
+    $site = new PanelSite($_SESSION["login"], $conn);
     $js = 'panel.js';
 }
 ?>
