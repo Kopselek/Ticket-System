@@ -17,3 +17,4 @@ require_once __DIR__ . "/../Site/LoginSite.php";
 require_once __DIR__ . '/../Site/RegisterSite.php';
 require_once __DIR__ . "/../Site/PanelSite.php";
 require_once __DIR__ . "/../Site/TicketSite.php";
+require_once __DIR__ . "/../Site/CreateTicketSite.php";
