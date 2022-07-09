@@ -7,9 +7,15 @@ $conn;
 
 if (isset($_SESSION["login"])) {
     $conn = new DBConnector();
-    $site = new PanelSite($_SESSION["login"], $conn);
-    $js = 'panel.js';
+    if (isset($_GET["ticket"])) {
+        $site = new TicketSite($_SESSION["login"], $conn, $_GET["ticket"]);
+        $js = 'ticket.js';
+    } else {
+        $site = new PanelSite($_SESSION["login"], $conn);
+        $js = 'panel.js';
+    }
 }
+
 ?>
 
 <!doctype html>
