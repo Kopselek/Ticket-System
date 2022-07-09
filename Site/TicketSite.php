@@ -24,7 +24,7 @@ class TicketSite extends BaseSite
 
             $form = new Form('form', "POST");
             $form->addElement(new TextAreaInput('Ticket message', 'ticket-content', 'form'));
-            $form->addElement(new Button('message-ticket', 'Submit'));
+            $form->addElement(new Button('ticket-submit', 'Submit'));
             $this->forms[] = $form;
             $this->forms[] = new MessageOutput('msg');
 
