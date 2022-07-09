@@ -50,13 +50,13 @@ class DBConnector
         $user_exist = $this->IsUserInDatabase($login);
         if (!$user_exist) {
             echo "User does not exist! Please register first.";
-            return;
+            return false;
         }
 
         $password_matches = $this->IsPasswordMatching($login, $password);
         if (!$password_matches) {
             echo "Login or Password does not match.";
-            return;
+            return false;
         }
 
         return true;
